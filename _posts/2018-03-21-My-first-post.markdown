@@ -1,11 +1,11 @@
-#My First Post
+# My First Post
 
 This is my first post and I am using it to test:
-*Markdown Syntax
-*Jekyll
-*Other Stuff
+* Markdown Syntax
+* Jekyll
+* Other Stuff
 
-An example of *Other Stuff* is the possibility to *write code* such as:
+An example of *Other Stuff* is the possibility to **write code** such as:
 
 ```python
 def myfunc():
