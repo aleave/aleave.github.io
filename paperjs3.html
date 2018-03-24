@@ -36,12 +36,12 @@ function onMouseUp(event) {
 }
 */
 function onMouseDown(event) {
-	ant = new Path.Circle(event.point, 20);
-	ant.fillColor = "black";
-	
+	var ant = new Path.Circle(event.point, 20);
+	//ant.fillColor = "black";
+	ant.fillColor = new Color(Math.random(),Math.random(),Math.random());
 	}
 
-ant = "boo"	;
+//ant = "boo"	;
 	
 var destination = Point.random() * view.size;
 
@@ -52,15 +52,23 @@ function onMouseMove(event) {
 	
 function onFrame(event) {
 
-	var vector = destination - ant.position;
+	
 	
 	
 	/*if (vector.length < 5) {
 		destination = Point.random() * view.size;
 	}*/
-	if (ant !== "boo") {
-		ant.position += vector / 30;
+	
+	// Save a reference to the children array in a variable,
+	// so we don't end up with very long lines of code:
+	var children = project.activeLayer.children;
+	for (var i = 0; i < children.length; i++) {
+	var child = children[i];
+		var vector = destination - child.position + Point.random() * view.size/2;
+		child.position += vector / 30 ;
+	
 	}
+	
 }
 
 </script>
