@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Resnick Termite</title>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.11.5/paper-full.min.js"></script>
+
+<!-- script type="text/javascript" src="Javascript-Voronoi/rhill-voronoi-core.min.js"></script> -->
+</head>
+<body>
+<div id="canvas" style="margin-left:300px">
+<canvas id="myCanvas" resize="true" width="1141" height="949" style="background:#e7ddc2"></canvas>
+
+<script type="text/paperscript" canvas = "myCanvas"> 
+
+
+//termite constructor
+
+function Termite(positionPoint, size) {
+	this.body = new Path.Circle(positionPoint, size);
+	this.body.fillColor = "black";
+	this.name = "Termite";
+	this.carryChip = 0;
+	
+	
+	this.move = function(speedX, speedY) {
+		this.body.position.x+= (Math.random() * 2 -1) * speedX;
+		this.body.position.y+= (Math.random() * 2 -1) * speedY;
+		
+		if (this.body.bounds.left > view.size.width) {
+					this.body.position.x = 0;
+			 
+				}
+			
+				if (this.body.bounds.right < 0) {
+					this.body.position.x =  view.size.width;
+				}
+			
+				if (this.body.bounds.top	> view.size.height) {
+					this.body.position.y = 0;
+				}
+			
+				if (this.body.bounds.bottom < 0) {
+					this.body.position.y =  view.size.height;
+				}
+	}
+}
+
+
+var nTermites = 8;
+
+var startX;
+var startY;
+
+var tGroup = [];
+
+var tSize = 5; //size of termite in points
+
+for (var i = 1; i <= nTermites; i++) {
+	startX = Math.random() *view.size.width;
+	startY = Math.random() *view.size.height;
+	tGroup.push(new Termite(new Point(startX,startY), tSize));
+	
+}
+
+
+var nWoodChips = 100;
+
+//generate initial Array of wood chips with positions
+var woodChipsArray = [];
+var wcX, wcY;
+
+function WoodChips(nWoodChips) {
+
+		this.positionArray = [];
+		
+		for (var i = 1; i <= nWoodChips; i++) {
+			wcX = Math.random() * view.size.width;
+			wcY = Math.random() * view.size.height;
+			this.positionArray.push([wcX,wcY]);
+		}
+		
+		this.draw = function(colorF) {
+		
+		for (var i = 0; i < this.positionArray.length; i++) {
+			var posX = this.positionArray[i][0];
+			var posY = this.positionArray[i][1];
+			//debugger;
+			var chip = new Path.Circle(new Point(posX, posY), 2);
+			chip.fillColor =colorF;
+			
+			
+		}
+		
+		}
+}
+//vAnt = new Termite(new Point(300,300), 5);
+
+
+var woodChips = new WoodChips(nWoodChips);
+
+woodChips.draw("red");
+
+var speedX;
+var speedY;
+/*vAnt = "boo";
+
+
+vAnt = new Path.Circle(new Point(300,300), 5);
+vAnt.fillColor = "black";
+console.log("click");
+*/
+
+
+function onFrame(event) {
+		//vAnt.position.x += 0;
+		//vAnt.position.y += -5;
+	//woodChips.draw();
+	var lInit = woodChips.positionArray.length; // initial length of chips array
+	for (var i = 0; i < tGroup.length; i++) {
+		var vAnt = tGroup[i];
+		//console.log(vAnt);
+		if (vAnt.name == "Termite") {
+			//console.log(vAnt);
+			if (event.count % 2 === 0) {
+				speedX = 3 * Math.random();
+				speedY = 3 * Math.random();
+				vAnt.move(speedX, speedY);
+				
+				for (j =0; j < woodChips.positionArray.length; j++) {
+					 var wc = woodChips.positionArray[j];
+					 var dist2X = Math.pow(vAnt.body.position.x - wc[0], 2);
+					 var dist2Y = Math.pow(vAnt.body.position.y - wc[1], 2);
+					 if (dist2X + dist2X <= Math.pow(tSize,2)) {
+						//collision - for now remove only
+						woodChips.positionArray.splice(j,1);
+						woodChips.draw("green");
+					 }
+					}
+				//check if collision with woodChips
+				//redraw woodchips only if collision to make it faster
+				
+			}
+		}
+		
+	
+	}
+	
+	// redraw chips only if length has changed, meaning a collision has happened
+	
+
+}
+
+
+// Create a new path once, when the script is executed:
+/*var myPath = new Path();
+myPath.strokeColor = 'black';
+
+// This function is called whenever the user
+// clicks the mouse in the view:
+function onMouseDown(event) {
+	// Add a segment to the path at the position of the mouse:
+	myPath.add(event.point);
+}
+
+function onMouseDown(event) {
+	console.log('You pressed the mouse!');
+}
+
+function onMouseDrag(event) {
+	console.log('You dragged the mouse!');
+}
+
+function onMouseUp(event) {
+	console.log('You released the mouse!');
+}
+
+/*function onMouseDown(event) {
+	var ant = new Path.Circle(event.point, 20);
+	//ant.fillColor = "black";
+	ant.fillColor = new Color(Math.random(),Math.random(),Math.random());
+	}
+
+//ant = "boo"	;
+	
+var destination = Point.random() * view.size;
+
+function onMouseMove(event) {
+	destination = event.point;
+
+}
+	
+function onFrame(event) {
+
+	
+	
+	
+	/*if (vector.length < 5) {
+		destination = Point.random() * view.size;
+	}*/
+	
+	// Save a reference to the children array in a variable,
+	// so we don't end up with very long lines of code:
+/*	var children = project.activeLayer.children;
+	for (var i = 0; i < children.length; i++) {
+	var child = children[i];
+		var vector = destination - child.position + Point.random() * view.size/2;
+		child.position += vector / 30 ;
+	
+	}
+	
+}
+*/
+</script>
+
+</div>
+</body>
+
+</html>
+
