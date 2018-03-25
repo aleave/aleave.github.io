@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Resnick Termite</title>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.11.5/paper-full.min.js"></script>
+
+<!-- script type="text/javascript" src="Javascript-Voronoi/rhill-voronoi-core.min.js"></script> -->
+</head>
+<body>
+<div id="canvas" style="margin-left:300px">
+<canvas id="myCanvas" resize="true" width="1141" height="949" style="background:#e7ddc2"></canvas>
+
+<script type="text/paperscript" canvas = "myCanvas"> 
+
+//function to create a chip
+function newChip() {
+	var size = 2;
+	var color = "red";
+	var center = new Point(Math.random() * view.size.width, Math.random() * view.size.height);
+	var chip = new Path.Circle(center,size);
+	chip.fillColor = "red";
+	return(chip);
+}
+
+
+//initialize woodchips using a paperjs group
+chips = new Group();
+nChips = 300;
+
+for (var i = 1; i <= nChips; i++) {
+	chips.addChild(newChip());
+}
+
+
+//termite constructor
+
+function Termite(positionPoint, size) {
+	this.body = new Path.Circle(positionPoint, size);
+	this.body.fillColor = "black";
+	this.name = "Termite";
+	this.carryChip = 0;
+	this.body.size = size;
+	
+	
+	this.move = function(speedX, speedY) {
+		this.body.position.x+= (Math.random() * 2 -1) * speedX;
+		this.body.position.y+= (Math.random() * 2 -1) * speedY;
+		
+		if (this.body.bounds.left > view.size.width) {
+					this.body.position.x = 0;			 
+				}
+			
+				if (this.body.bounds.right < 0) {
+					this.body.position.x =  view.size.width;
+				}
+			
+				if (this.body.bounds.top	> view.size.height) {
+					this.body.position.y = 0;
+				}
+			
+				if (this.body.bounds.bottom < 0) {
+					this.body.position.y =  view.size.height;
+				}
+	}
+}
+
+
+var nTermites = 8;
+
+var startX;
+var startY;
+
+var tGroup = [];
+
+var tSize = 5; //size of termite in points
+
+for (var i = 1; i <= nTermites; i++) {
+	startX = Math.random() *view.size.width;
+	startY = Math.random() *view.size.height;
+	tGroup.push(new Termite(new Point(startX,startY), tSize));
+	
+}
+
+
+
+
+var speedX;
+var speedY;
+/*vAnt = "boo";
+
+
+vAnt = new Path.Circle(new Point(300,300), 5);
+vAnt.fillColor = "black";
+console.log("click");
+*/
+
+
+function onFrame(event) {
+	
+	//woodChips.draw();
+	
+	for (var i = 0; i < tGroup.length; i++) {
+		var vAnt = tGroup[i];
+		//console.log(vAnt);
+		if (vAnt.name == "Termite") {
+			//console.log(vAnt);
+			if (event.count % 2 === 0) {
+				speedX = 6 * Math.random();
+				speedY = 6 * Math.random();
+				vAnt.move(speedX, speedY);
+				
+				for (var j =0; j < chips.children.length; j++) {
+					 var wc = chips.children[j];
+					 var dist2X = Math.pow(vAnt.body.position.x - wc.position.x, 2);
+					 var dist2Y = Math.pow(vAnt.body.position.y - wc.position.y, 2);
+					 if (dist2X + dist2Y <= Math.pow(vAnt.body.size,2)) {
+						//collision - for now remove only
+						
+						
+						//vAnt.body.fillColor = "green";
+						
+						vAnt.carryChip = 1;
+						wc.remove();
+						//vAnt.body.fillColor = "black";
+						var fscale = 1.10;
+						vAnt.body.scale(fscale);
+						vAnt.body.size *= fscale;
+						
+					 }
+					}
+				//check if collision with woodChips
+				
+				
+			}
+		}
+		
+	
+	}
+	
+	// redraw chips only if length has changed, meaning a collision has happened
+	
+
+}
+
+
+// Create a new path once, when the script is executed:
+/*var myPath = new Path();
+myPath.strokeColor = 'black';
+
+// This function is called whenever the user
+// clicks the mouse in the view:
+function onMouseDown(event) {
+	// Add a segment to the path at the position of the mouse:
+	myPath.add(event.point);
+}
+
+function onMouseDown(event) {
+	console.log('You pressed the mouse!');
+}
+
+function onMouseDrag(event) {
+	console.log('You dragged the mouse!');
+}
+
+function onMouseUp(event) {
+	console.log('You released the mouse!');
+}
+
+/*function onMouseDown(event) {
+	var ant = new Path.Circle(event.point, 20);
+	//ant.fillColor = "black";
+	ant.fillColor = new Color(Math.random(),Math.random(),Math.random());
+	}
+
+//ant = "boo"	;
+	
+var destination = Point.random() * view.size;
+
+function onMouseMove(event) {
+	destination = event.point;
+
+}
+	
+function onFrame(event) {
+
+	
+	
+	
+	/*if (vector.length < 5) {
+		destination = Point.random() * view.size;
+	}*/
+	
+	// Save a reference to the children array in a variable,
+	// so we don't end up with very long lines of code:
+/*	var children = project.activeLayer.children;
+	for (var i = 0; i < children.length; i++) {
+	var child = children[i];
+		var vector = destination - child.position + Point.random() * view.size/2;
+		child.position += vector / 30 ;
+	
+	}
+	
+}
+*/
+</script>
+
+</div>
+</body>
+
+</html>
+
