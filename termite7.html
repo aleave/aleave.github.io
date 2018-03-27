@@ -2,21 +2,37 @@
 <html>
 <head>
 <title>Resnick Termite</title>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+
+<link href="https://maxcdn.bootstrapcdn.com/bootswatch/4.0.0/cosmo/bootstrap.min.css" rel="stylesheet" integrity="sha384-UU2jkdv1M9UEjLje/kygVxqMBq9Jrg9z+Gqvw972H6BqKTzDvLaRJfK7PnzLM4SI" crossorigin="anonymous">
+
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.11.5/paper-full.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.3.1.js"
-  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
-  crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+
   
   
 
 <!-- script type="text/javascript" src="Javascript-Voronoi/rhill-voronoi-core.min.js"></script> -->
 </head>
 <body>
-<div id=box style="text-align:center">
 
-<h1 > Resnick Termite Simulation - My implementation </h1>
+<div class="container" style="padding-top:50px">
 
-<div id="canvas">
+
+<div class="row" style="padding-top:10px">
+
+<div class="col-4" style="padding-top:50px""> <p>Instructions go here </p></div>
+
+
+<div class="col-8"> 
+<h2 > Resnick Termite Simulation - My implementation </h2>
+
+<div id="canvas" style="padding-top:20px">
 <canvas id="myCanvas" resize="true" width="600" height="600" style="background:#F5F5F5"></canvas>
 
 <script type="text/paperscript" canvas = "myCanvas"> 
@@ -265,11 +281,17 @@ function onFrame(event) {
 <br/>
 <button id="start"> Start </button>
 <input type="text" id="niter" value=1 size=5>
-<input type="text" id="ntermites" value=1 size=5>
-<input type="text" id="nchips" value=1 size=5>
+<input type="text" id="ntermites" value=20 size=5>
+<input type="text" id="nchips" value=1000 size=5>
+</div>
 
 </div>
 </div>
+</div>
+
+<!-- js libraries required by bootstrap
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 
 </html>
