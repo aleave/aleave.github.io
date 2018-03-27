@@ -17,7 +17,7 @@
 <h1 > Resnick Termite Simulation - My implementation </h1>
 
 <div id="canvas">
-<canvas id="myCanvas" resize="true" width="600" height="600" style="background:#e7ddc2"></canvas>
+<canvas id="myCanvas" resize="true" width="600" height="600" style="background:#F5F5F5"></canvas>
 
 <script type="text/paperscript" canvas = "myCanvas"> 
 
@@ -28,7 +28,7 @@ function newChip(xpos, ypos) {
 	var color = "red";
 	var center = new Point(xpos, ypos);
 	var chip = new Path.Circle(center,size);
-	chip.fillColor = "red";
+	chip.fillColor = "#FF533D";
 	return(chip);
 }
 
@@ -46,7 +46,7 @@ for (var i = 1; i <= nChips; i++) {
 
 function Termite(positionPoint, size) {
 	this.body = new Path.Circle(positionPoint, size);
-	this.body.fillColor = "black";
+	this.body.fillColor = "#1A2930";
 	this.name = "Termite";
 	this.carryChip = 0;
 	this.body.size = size;
@@ -105,6 +105,11 @@ console.log("click");
 */
 var goAnim = false;
 
+var niter; 
+
+//test
+niter = 1;
+
 $("#start").click(function() {
 	goAnim = !goAnim;
 		if (goAnim) {
@@ -124,6 +129,7 @@ function onFrame(event) {
 	
 	//woodChips.draw();
 	if (goAnim) {
+		for ( var k = 1; k <= niter; k++) {
 		for (var i = 0; i < tGroup.length; i++) {
 			var vAnt = tGroup[i];
 			//console.log(vAnt);
@@ -143,7 +149,7 @@ function onFrame(event) {
 							if (vAnt.carryChip) {
 								vAnt.carryChip = 0;
 								chips.addChild(newChip(vAnt.body.position.x, vAnt.body.position.y));
-								vAnt.body.fillColor = "black";
+								vAnt.body.fillColor = "#1A2930";
 								vAnt.body.position.x += 10 * Math.random() - 5;
 								vAnt.body.position.y += 10 * Math.random() - 5;
 								
@@ -171,6 +177,7 @@ function onFrame(event) {
 			}
 			
 		
+		}
 		}
 	}
 	// redraw chips only if length has changed, meaning a collision has happened
