@@ -26,16 +26,34 @@
 
 <div class="row" style="padding-top:10px">
 
-<div class="col-4 col-xs-12" style="padding-top:50px"> <p>Instructions go here </p></div>
+<div class="col-lg-4 col-12 order-2" style="padding-top:50px"> <p>Instructions go here </p></div>
 
 
-<div class="col-8 col-xs-12"> 
-<h2 > Resnick Termite Simulation - My implementation </h2>
+<div class="col-lg-8 col-12" id="colsim"> 
+<h2 > Resnick Termite Simulator</h2>
+<p><em>Implementation: alessandro averchi 2018  </em></p>
 
-<div id="canvas" style="padding-top:20px">
-<canvas id="myCanvas" style="background:#F5F5F5; width:100%; height:600px"></canvas>
 
-<script type="text/paperscript" canvas = "myCanvas"> 
+<canvas id="myCanvas" style="background:#F5F5F5" width="600" height="600" ></canvas>
+
+<script type="text/paperscript" canvas = "myCanvas" > 
+
+/*$( document ).ready( function() {
+//resizeCanvas();
+resizeCanvas()
+
+} );
+
+function resizeCanvas() {
+var c = $("#myCanvas");
+ctx = c[0].getContext("2d");
+ctx.canvas.width = $("#colsim").width();
+ctx.canvas.height = ctx.canvas.width;
+console.log(ctx.canvas.width)
+//ctx.canvas.style.width = ctx.canvas.width + "px";
+//ctx.canvas.style.height = ctx.canvas.height + "px";
+
+}*/
 
 
 //function to create a chip
@@ -120,12 +138,15 @@ var goAnim = false;
 var niter; 
 
 //test
-niter = 1;
+
 var tGroup;
+
+//debugger;
 
 var termiteLayer = new Layer();
 
 $("#start").click(function() {
+	view.update();
 	goAnim = !goAnim;
 		if (goAnim) {
 			$("#start").html("Stop");
@@ -133,6 +154,7 @@ $("#start").click(function() {
 			console.log("here1");
 			nTermites = $("#ntermites").val();
 			
+			niter = $("#niter").val();
 			tGroup = [];
 			for (var i = 1; i <= nTermites; i++) {
 				
@@ -279,11 +301,60 @@ function onFrame(event) {
 */
 </script>
 <br/>
-<button id="start"> Start </button>
-<input type="text" id="niter" value=1 size=5>
-<input type="text" id="ntermites" value=20 size=5>
-<input type="text" id="nchips" value=1000 size=5>
+
+
+
+
+<!-- <label for="ntermites">N. of termites:</label> -->
+
+
+
+
+<div class="container">
+<div class="row">
+
+ <div class = "col-12 col-md-auto" style="padding-bottom:1rem; padding-top:1rem">
+ <button type="submit" class="btn btn-primary btn-lg" id="start"> Start </button>
+
+ </div>
+
+ 
+<div class = "col" style="padding-bottom:1rem; padding-top:1rem">
+    
+  
+  <input type="text" id="ntermites" value=1 size=5 >
+  <p>N. of Termites <p>
 </div>
+ 
+<div class = "col" style="padding-bottom:1rem; padding-top:1rem">
+    
+
+  <input type="text" id="nchips" value=1000 size=5>
+  <p>N. of Woodchips<p>
+</div>
+
+<div class = "col" style="padding-bottom:1rem; padding-top:1rem">
+    
+
+  <input type="text" id="niter" value=1 size=5>
+  <p>Speed (1-20)<p>
+</div>
+
+ 
+ 
+
+  </div>
+</div> 
+ 
+</div>
+
+
+
+
+
+<!--<input type="text" id="ntermites" value=20 size=5> -->
+<!--<input type="text" id="nchips" value=1000 size=5> -->
+
 
 </div>
 </div>
