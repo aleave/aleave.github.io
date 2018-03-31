@@ -7,6 +7,13 @@ Ceci est un script temporaire.
 import numpy as np
 import matplotlib.pyplot as plt
 import pdb
+
+from pytictoc import TicToc
+t = TicToc() #create instance of class
+
+
+from sklearn.neighbors import NearestNeighbors
+
 #plt.scatter(x, y, s=area, c=colors, alpha = 0.5)
 
 posXmax = 600
@@ -108,7 +115,7 @@ for i in range(1,nTermites+1):
 
 #populate Wood chips list
 
-nChips = 1
+nChips = 2000
 
 cRadius = 1
 wGroup = []
@@ -120,8 +127,11 @@ for j in range(0 , nChips+1):
 
 #scatterPlot(tGroup, wGroup)
 
+t.tic()
 #input("Press enter to continue...")
-nIter = 10000
+nIter = 1000
+
+neigh = NearestNeighbors(1, tSize)
 
 for n in range(1,nIter+1):
     if ( n % 100 == 0):
@@ -131,26 +141,59 @@ for n in range(1,nIter+1):
         
         vAnt.move(speedX, speedY)
         
-        for j in range(0, len(wGroup)-1):
-            
-            wc = wGroup[j]
-            dist2X = ( vAnt.positionX - wc.positionX ) ** 2
-            dist2Y = ( vAnt.positionY - wc.positionY ) ** 2
-    
-            if (dist2X + dist2Y <= vAnt.tSize ** 2):
-                if (vAnt.carryChip):
+        
+        
+        #cPosX = [c.positionX for c in wGroup]
+        #cPosY = [c.positionY for c in wGroup]
+        
+        cPos = [[c.positionX, c.positionY] for c in wGroup]
+        #pdb.set_trace()
+        #cPosList =  map(list, zip(cPosX, cPosY))
+        
+        neigh.fit(cPos)
+        res = neigh.kneighbors([[vAnt.positionX, vAnt.positionY]], 1, return_distance=True)
+        
+        distT = float(res[0])
+        indx = int(res[1])
+        
+        if (distT <= tSize):
+            if (vAnt.carryChip):
                     vAnt.carryChip = 0
                     wGroup.append(Chip(vAnt.positionX, vAnt.positionY, cRadius))
                     vAnt.color = "#1A2930"
                     vAnt.positionX += 10* np.random.random() -5
                     vAnt.positionY += 10* np.random.random() -5
-                else:
+            else:
+                    wc = wGroup[indx]
                     vAnt.carryChip = 1
                     vAnt.color = "green"
                     wGroup.remove(wc)
-                    #print(len(wGroup))
-                    #pdb.set_trace()
+#                    #print(len(wGroup))
+#                    #pdb.set_trace()
+            
+        
+        #nearest neighbours returns distance as first element and index at second
+        
+#        for j in range(0, len(wGroup)-1):
+#            
+#            wc = wGroup[j]
+#            dist2X = ( vAnt.positionX - wc.positionX ) ** 2
+#            dist2Y = ( vAnt.positionY - wc.positionY ) ** 2
+#    
+#            if (dist2X + dist2Y <= vAnt.tSize ** 2):
+#                if (vAnt.carryChip):
+#                    vAnt.carryChip = 0
+#                    wGroup.append(Chip(vAnt.positionX, vAnt.positionY, cRadius))
+#                    vAnt.color = "#1A2930"
+#                    vAnt.positionX += 10* np.random.random() -5
+#                    vAnt.positionY += 10* np.random.random() -5
+#                else:
+#                    vAnt.carryChip = 1
+#                    vAnt.color = "green"
+#                    wGroup.remove(wc)
+#                    #print(len(wGroup))
+#                    #pdb.set_trace()
                     
-
+t.toc()
 print("after " + str(nIter) + " Iterations")
 scatterPlot(tGroup, wGroup)  

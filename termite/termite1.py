@@ -7,6 +7,11 @@ Ceci est un script temporaire.
 import numpy as np
 import matplotlib.pyplot as plt
 import pdb
+
+from pytictoc import TicToc
+t = TicToc() #create instance of class
+
+
 #plt.scatter(x, y, s=area, c=colors, alpha = 0.5)
 
 posXmax = 600
@@ -108,7 +113,7 @@ for i in range(1,nTermites+1):
 
 #populate Wood chips list
 
-nChips = 1
+nChips = 2000
 
 cRadius = 1
 wGroup = []
@@ -120,8 +125,10 @@ for j in range(0 , nChips+1):
 
 #scatterPlot(tGroup, wGroup)
 
+
+t.tic()
 #input("Press enter to continue...")
-nIter = 10000
+nIter = 1000
 
 for n in range(1,nIter+1):
     if ( n % 100 == 0):
@@ -152,5 +159,6 @@ for n in range(1,nIter+1):
                     #pdb.set_trace()
                     
 
+t.toc()
 print("after " + str(nIter) + " Iterations")
 scatterPlot(tGroup, wGroup)  
