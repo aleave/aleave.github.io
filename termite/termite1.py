@@ -38,27 +38,37 @@ class Termite:
         self.boundsTop = self.positionY + 1*self.tSize
         self.plotArea = np.pi * self.tSize ** 2
           
-    def move(self, speedX, speedY):
-        self.positionX += (np.random.random() * 2 - 1) * speedX
-        self.positionY += (np.random.random() * 2 - 1) * speedY
-        
+    
+    def updateBoundingBox(self):
         self.boundsLeft = self.positionX - 1*self.tSize
         self.boundsRight = self.positionX + 1*self.tSize
         self.boundsBottom = self.positionY - 1*self.tSize
         self.boundsTop = self.positionY + 1*self.tSize
      
         
+    
+    def move(self, speedX, speedY):
+        self.positionX += (np.random.random() * 2 - 1) * speedX
+        self.positionY += (np.random.random() * 2 - 1) * speedY
+        
+        self.updateBoundingBox()
+     
+        
         if (self.boundsLeft > self.posXmax):
             self.positionX = 0
+            self.updateBoundingBox()
         
         if (self.boundsRight < 0):
             self.positionX = self.posXmax
+            self.updateBoundingBox()
             
         if (self.boundsTop > self.posYmax):
             self.positionY = 0
+            self.updateBoundingBox()
             
         if (self.boundsBottom < 0):
             self.positionY = self.posYmax
+            self.updateBoundingBox()
 
 
 
@@ -128,7 +138,7 @@ for j in range(0 , nChips+1):
 
 t.tic()
 #input("Press enter to continue...")
-nIter = 1000
+nIter = 4000
 
 for n in range(1,nIter+1):
     if ( n % 100 == 0):
@@ -157,6 +167,8 @@ for n in range(1,nIter+1):
                     wGroup.remove(wc)
                     #print(len(wGroup))
                     #pdb.set_trace()
+                    
+                break
                     
 
 t.toc()
