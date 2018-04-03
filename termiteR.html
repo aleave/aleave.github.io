@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Resnick Termite</title>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+
+<link href="https://maxcdn.bootstrapcdn.com/bootswatch/4.0.0/cosmo/bootstrap.min.css" rel="stylesheet" integrity="sha384-UU2jkdv1M9UEjLje/kygVxqMBq9Jrg9z+Gqvw972H6BqKTzDvLaRJfK7PnzLM4SI" crossorigin="anonymous">
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.11.5/paper-full.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+
+  
+  
+
+<!-- script type="text/javascript" src="Javascript-Voronoi/rhill-voronoi-core.min.js"></script> -->
+</head>
+<body>
+
+<div class="container" style="padding-top:50px">
+
+
+<div class="row" style="padding-top:10px">
+
+<div class="col-lg-4 col-12 order-2" style="padding-top:50px"> <h3><b>Instructions: </b></h3>
+<ul>
+<li>Set the number of termites and woodchips </li>
+<li>Click on Start to run the simulation </li>
+</ul>
+
+<p> The recommended settings are for not more than 100 termites and 1000 woodchips to avoid excessive slowdown. <p/>
+<p> The termites are the circles and woodchips are the red dots. Termites carrying a chip are green, those not carrying one are black. </p> 
+<p> <em>It will take a really large number of iterations to see large piles building up, but you should be able to see the piling behavior almost from the start </em></p>
+</div>
+
+
+<div class="col-lg-8 col-12" id="colsim"> 
+<h2 > Resnick Termite Simulator</h2>
+<p><em>Implementation: alessandro averchi 2018  </em></p>
+
+
+<canvas id="myCanvas" style="background:#F5F5F5" width="600" height="600" ></canvas>
+
+<script type="text/paperscript" canvas = "myCanvas" > 
+
+/*$( document ).ready( function() {
+//resizeCanvas();
+resizeCanvas()
+
+} );
+
+function resizeCanvas() {
+var c = $("#myCanvas");
+ctx = c[0].getContext("2d");
+ctx.canvas.width = $("#colsim").width();
+ctx.canvas.height = ctx.canvas.width;
+console.log(ctx.canvas.width)
+//ctx.canvas.style.width = ctx.canvas.width + "px";
+//ctx.canvas.style.height = ctx.canvas.height + "px";
+
+}*/
+
+
+//function to create a chip
+function newChip(xpos, ypos) {
+	var size = 2;
+	var color = "red";
+	var center = new Point(xpos, ypos);
+	var chip = new Path.Circle(center,size);
+	chip.fillColor = "#FF533D";
+	return(chip);
+}
+
+
+//initialize woodchips using a paperjs group
+chips = new Group();
+nChips = 1000;
+
+
+
+
+//termite constructor
+
+function Termite(positionPoint, size) {
+	this.body = new Path.Circle(positionPoint, size);
+	this.body.fillColor = "#1A2930";
+	this.name = "Termite";
+	this.carryChip = 0;
+	this.body.size = size;
+	
+	
+	this.move = function(speedX, speedY) {
+		this.body.position.x+= (Math.random() * 2 -1) * speedX;
+		this.body.position.y+= (Math.random() * 2 -1) * speedY;
+		
+		if (this.body.bounds.left > view.size.width) {
+					this.body.position.x = 0;			 
+				}
+			
+				if (this.body.bounds.right < 0) {
+					this.body.position.x =  view.size.width;
+				}
+			
+				if (this.body.bounds.top	> view.size.height) {
+					this.body.position.y = 0;
+				}
+			
+				if (this.body.bounds.bottom < 0) {
+					this.body.position.y =  view.size.height;
+				}
+	}
+}
+
+
+//var nTermites = 60;
+var nTermites;
+
+//nTermites = $("#ntermites").val();
+
+var startX;
+var startY;
+
+
+
+var tSize = 5; //size of termite in points
+
+
+var speedX;
+var speedY;
+/*vAnt = "boo";
+
+
+vAnt = new Path.Circle(new Point(300,300), 5);
+vAnt.fillColor = "black";
+console.log("click");
+*/
+var goAnim = false;
+
+var niter = 1; 
+
+//test
+
+var tGroup;
+
+//debugger;
+
+var termiteLayer = new Layer();
+
+$("#start").click(function() {
+	view.update();
+	goAnim = !goAnim;
+		if (goAnim) {
+			$("#start").html("Stop");
+			termiteLayer.removeChildren(); 
+			console.log("here1");
+			nTermites = $("#ntermites").val();
+			
+			//niter = $("#niter").val();
+			tGroup = [];
+			for (var i = 1; i <= nTermites; i++) {
+				
+				startX = Math.random() *view.size.width;
+				startY = Math.random() *view.size.height;
+				tGroup.push(new Termite(new Point(startX,startY), tSize));
+	
+			}
+			chips.removeChildren();
+			nChips = $("#nchips").val();
+			for (var i = 1; i <= nChips; i++) {
+				chips.addChild(newChip(Math.random() * view.size.width, Math.random() * view.size.height));
+				}
+			
+		} else {
+			$("#start").html("Start");
+			console.log("here2");
+		}
+	
+	}
+	);
+	
+
+
+function onFrame(event) {
+	
+	//woodChips.draw();
+	if (goAnim) {
+		for ( var k = 1; k <= niter; k++) {
+		for (var i = 0; i < tGroup.length; i++) {
+			var vAnt = tGroup[i];
+			//console.log(vAnt);
+			if (vAnt.name == "Termite") {
+				//console.log(vAnt);
+				if (event.count % 1 === 0) {
+					speedX = 6;
+					speedY = 6;
+					vAnt.move(speedX, speedY);
+					
+					for (var j =0; j < chips.children.length; j++) {
+						 var wc = chips.children[j];
+						 var dist2X = Math.pow(vAnt.body.position.x - wc.position.x, 2);
+						 var dist2Y = Math.pow(vAnt.body.position.y - wc.position.y, 2);
+						 if (dist2X + dist2Y <= Math.pow(vAnt.body.size,2)) {
+							//collision - for now remove only
+							if (vAnt.carryChip) {
+								vAnt.carryChip = 0;
+								chips.addChild(newChip(vAnt.body.position.x, vAnt.body.position.y));
+								vAnt.body.fillColor = "#1A2930";
+								vAnt.body.position.x += 10 * Math.random() - 5;
+								vAnt.body.position.y += 10 * Math.random() - 5;
+								
+							} else {
+								vAnt.carryChip = 1;
+								wc.remove();
+								vAnt.body.fillColor = "green";
+							
+							}
+							
+							//vAnt.body.fillColor = "green";
+							
+							
+							//vAnt.body.fillColor = "black";
+							/*var fscale = 1.10;
+							vAnt.body.scale(fscale);
+							vAnt.body.size *= fscale;*/
+							
+						 }
+						}
+					//check if collision with woodChips
+					
+					
+				}
+			}
+			
+		
+		}
+		}
+	}
+	
+	
+
+}
+
+
+
+</script>
+<br/>
+
+
+
+
+<!-- <label for="ntermites">N. of termites:</label> -->
+
+
+
+
+<div class="container">
+<div class="row">
+
+ <div class = "col-12 col-md-auto" style="padding-bottom:1rem; padding-top:1rem">
+ <button type="submit" class="btn btn-primary btn-lg" id="start"> Start </button>
+
+ </div>
+
+ 
+<div class = "col" style="padding-bottom:1rem; padding-top:1rem">
+    
+  
+  <input type="text" id="ntermites" value=100 size=5 >
+  <p>N. of Termites </p>
+</div>
+ 
+<div class = "col" style="padding-bottom:1rem; padding-top:1rem">
+    
+
+  <input type="text" id="nchips" value=1000 size=5>
+  <p>N. of Woodchips</p>
+</div>
+
+<div class = "col" style="padding-bottom:1rem; padding-top:1rem">
+    
+
+</div>
+
+ 
+ 
+
+  </div>
+</div> 
+ 
+</div>
+
+
+
+
+
+<!--<input type="text" id="ntermites" value=20 size=5> -->
+<!--<input type="text" id="nchips" value=1000 size=5> -->
+
+
+</div>
+</div>
+</div>
+
+<!-- js libraries required by bootstrap
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+
+</html>
+
