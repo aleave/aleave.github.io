@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Veichle</title>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+
+<link href="https://maxcdn.bootstrapcdn.com/bootswatch/4.0.0/cosmo/bootstrap.min.css" rel="stylesheet" integrity="sha384-UU2jkdv1M9UEjLje/kygVxqMBq9Jrg9z+Gqvw972H6BqKTzDvLaRJfK7PnzLM4SI" crossorigin="anonymous">
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.11.5/paper-full.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+
+ </head>
+<body>
+
+<div class="container" style="padding-top:50px">
+
+<canvas id="myCanvas" style="background:#F5F5F5" width="600" height="600" ></canvas>
+
+<script type="text/paperscript" canvas = "myCanvas" > 
+
+function Vector(x, y) {
+	//takes two points as start and end
+	this.x = x;
+	this.y = y;
+	
+
+}
+
+function norm(Vector) {
+
+	return Math.sqrt(Math.pow(Vector.x,2) + Math.pow(Vector.y,2));
+}
+
+function normalize(v) {
+	normV = norm(v);
+	
+	return new Vector(v.x / normV, v.y / normV);
+	
+}
+
+function addVector(v1,v2) {
+	
+	return new Vector(v1.x+v2.x, v1.y+v2.y);
+
+}
+
+function Veichle(lPoint, size) {
+	
+	this.body = new Path.Rectangle({
+	point: lPoint,
+	size: size,
+	fillColor: 'black'
+});
+
+	this.location = new Vector(lPoint.x, lPoint.y);
+	this.velocity = new Vector(0,0);
+	this.acceleration =0;
+	this.maxspeed = 1000;
+	
+	this.target = lPoint;
+	
+	this.setTarget = function(tPoint)  {
+		this.target = lPoint;
+	}
+	
+	this.move = function() {
+	
+	
+	this.location = addVector(this.location + this.velocity);
+	}
+}
+
+var sizeS = 5;
+var rectRatio = 3;
+
+v1 = new Veichle(new Point(50,50),new Size(sizeS,rectRatio*sizeS));
+
+var velocity = new Vector(3,1);
+
+function onFrame(event) {
+
+v1.body.position.x += velocity.x;
+v1.body.position.y += velocity.y;
+
+if (v1.body.position.x > 600 || v1.body.position.x < 0) {
+	velocity.x = -velocity.x;
+	
+	}
+	
+if (v1.body.position.y > 600 || v1.body.position.y < 0) {
+	velocity.y = -velocity.y;
+	
+	}
+
+
+}
+
+//target = new Point(400,200);
+
+//v1.setTarget(tPoint);
+
+</script>
+
+</div>
+
+</body>
+
