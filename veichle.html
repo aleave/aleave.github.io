@@ -34,7 +34,7 @@ function Veichle(lPoint, size) {
 	fillColor: 'black'
 });
 
-	this.position = this.body.center;
+	
 	this.velocity = new Point(0,0);
 	this.acceleration = new Point(0,0);
 	this.maxspeed = 1000;
@@ -56,20 +56,33 @@ v1 = new Veichle(new Point(50,50),new Size(sizeS,rectRatio*sizeS));
 v1.velocity = new Point(0,0);
 v1.acceleration = new Point(-0.001,0.1);
 
+var destination = v1.body.position;
+
+function onMouseMove(event) {
+	destination = event.point;
+}
+
 function onFrame(event) {
-if (v1.velocity.length < 10) {
+
+var direction = destination - v1.body.position;
+
+direction = direction.normalize();
+direction*0.5;
+v1.acceleration = direction;
+
+if (v1.velocity.length < 3) {
 v1.velocity += v1.acceleration; 
 }
 
 v1.body.position += v1.velocity;
 
 if (v1.body.position.x > 600 || v1.body.position.x < 0) {
-	velocity.x = -velocity.x;
+	v1.velocity.x = -v1.velocity.x;
 	
 	}
 	
 if (v1.body.position.y > 600 || v1.body.position.y < 0) {
-	velocity.y = -velocity.y;
+	v1.velocity.y = -v1.velocity.y;
 	
 	}
 
