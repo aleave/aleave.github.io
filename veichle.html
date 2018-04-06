@@ -23,31 +23,8 @@
 
 <script type="text/paperscript" canvas = "myCanvas" > 
 
-function Vector(x, y) {
-	//takes two points as start and end
-	this.x = x;
-	this.y = y;
-	
 
-}
 
-function norm(Vector) {
-
-	return Math.sqrt(Math.pow(Vector.x,2) + Math.pow(Vector.y,2));
-}
-
-function normalize(v) {
-	normV = norm(v);
-	
-	return new Vector(v.x / normV, v.y / normV);
-	
-}
-
-function addVector(v1,v2) {
-	
-	return new Vector(v1.x+v2.x, v1.y+v2.y);
-
-}
 
 function Veichle(lPoint, size) {
 	
@@ -57,9 +34,9 @@ function Veichle(lPoint, size) {
 	fillColor: 'black'
 });
 
-	this.location = new Vector(lPoint.x, lPoint.y);
-	this.velocity = new Vector(0,0);
-	this.acceleration =0;
+	this.position = this.body.center;
+	this.velocity = new Point(0,0);
+	this.acceleration = new Point(0,0);
 	this.maxspeed = 1000;
 	
 	this.target = lPoint;
@@ -68,11 +45,7 @@ function Veichle(lPoint, size) {
 		this.target = lPoint;
 	}
 	
-	this.move = function() {
 	
-	
-	this.location = addVector(this.location + this.velocity);
-	}
 }
 
 var sizeS = 5;
@@ -80,12 +53,11 @@ var rectRatio = 3;
 
 v1 = new Veichle(new Point(50,50),new Size(sizeS,rectRatio*sizeS));
 
-var velocity = new Vector(3,1);
+var velocity = new Point(2,1);
 
 function onFrame(event) {
 
-v1.body.position.x += velocity.x;
-v1.body.position.y += velocity.y;
+v1.body.position += velocity;
 
 if (v1.body.position.x > 600 || v1.body.position.x < 0) {
 	velocity.x = -velocity.x;
